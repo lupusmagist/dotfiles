@@ -63,6 +63,13 @@
   args:
     executable: /bin/bash
 
+- name: "OH_MY_ZSH | Create symlink to role files directory"
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/.zshrc"
+    dest: "{{ ansible_user_dir }}.zshrc"
+    state: link
+    force: true
+
 - name: Change user shell to zsh 
   become: true
   ansible.builtin.user:
