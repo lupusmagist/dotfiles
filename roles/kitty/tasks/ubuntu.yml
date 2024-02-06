@@ -1,0 +1,13 @@
+---
+- name: "Kitty | Installing kitty"
+  ansible.builtin.apt:
+    name: kitty
+    state: latest
+  become: true
+
+- name: "Kitty | Create symlink to role files directory"
+  ansible.builtin.file:
+    src: "{{ role_path }}/files"
+    dest: "{{ ansible_user_dir }}/.config/kitty"
+    state: link
+    force: true
