@@ -28,6 +28,12 @@
       - ripgrep
     state: present
 
+- ansible.builtin.include_role:
+    name: fzf
+
+- ansible.builtin.include_role:
+    name: tmux
+
 - name: OH_MY_ZSH | Install Oh My Zsh
   ansible.builtin.git:
     repo: https://github.com/ohmyzsh/ohmyzsh.git
