@@ -125,19 +125,19 @@ alias .....='cd ../../../..'
 alias rmd='/bin/rm  --recursive --force --verbose '
 
 # Load Colors
-eval `dircolors ~/.dir_colors/dircolors.gruv1`
+# eval `dircolors ~/.dir_colors/dircolors.gruv1`
 
 # Change the prompt
 prompt_context() {} 
 
 # Start tmux on terminal start
 # if [ "$TMUX" = "" ]; then tmux a; fi
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# export PYENV_ROOT="$HOME/.pyenv"
+# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init -)"
+# export PYENV_ROOT="$HOME/.pyenv"
+# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init -)"
 
 alias nvim='~/nvim.appimage'
 alias vim='~/nvim.appimage'
