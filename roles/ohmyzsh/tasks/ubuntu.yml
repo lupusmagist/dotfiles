@@ -14,13 +14,6 @@
       - zsh
     state: present
 
-- name: OH_MY_ZSH | Install Powerline fonts
-  become: true
-  ansible.builtin.apt:
-    name:
-      - fonts-powerline
-    state: present
-
 - name: OH_MY_ZSH | Install ripgrep
   become: true
   ansible.builtin.apt:
@@ -29,10 +22,16 @@
     state: present
 
 - ansible.builtin.include_role:
+    name: fonts
+
+- ansible.builtin.include_role:
     name: fzf
 
 - ansible.builtin.include_role:
     name: tmux
+
+- ansible.builtin.include_role:
+    name: pyenv
 
 - name: OH_MY_ZSH | Install Oh My Zsh
   ansible.builtin.git:
