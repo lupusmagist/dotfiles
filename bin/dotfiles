@@ -108,12 +108,11 @@ fi
 if ! dpkg -s python3-pip >/dev/null 2>&1; then
     _task "Installing Python3 Pip"
         _cmd "sudo apt-get install -y python3-pip"
-        _cmd "sudo rm /usr/lib/python3.11/EXTERNALLY-MANAGED"
 fi
 # Check if pip module watchdog is installed
 if ! pip3 list | grep watchdog >/dev/null 2>&1; then
     _task "Installing Python3 Watchdog"
-        _cmd "pip3 install watchdog"
+        _cmd "pip3 install watchdog --break-system-packages"
 fi
 
 
