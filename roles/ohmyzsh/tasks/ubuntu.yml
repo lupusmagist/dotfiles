@@ -66,7 +66,7 @@
 - name: "OH_MY_ZSH | Create symlink to role files directory"
   ansible.builtin.file:
     src: "{{ role_path }}/files/.zshrc"
-    dest: "{{ ansible_user_dir }}.zshrc"
+    dest: "{{ ansible_user_dir }}/.zshrc"
     state: link
     force: true
 
