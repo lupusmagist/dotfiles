@@ -9,14 +9,35 @@
       - unzip
       - ansible-lint
       - ripgrep
+      - fd-find
     state: present
   become: true
 
-- name: "Neovim | Install"
-  ansible.builtin.apt:
-    name: neovim
-    state: present
-  become: true
+- name: "Neovim | Check if cargo is installed"
+  shell: command -v cargo
+  register: cargo_exists
+  ignore_errors: yes
+
+- name: "Neovim | Install cargo"
+  when: cargo_exists is failed
+  ansible.builtin.include_role:
+    name: rust
+
+- name: "Neovim | Install Treesitter-cli"
+  shell: cargo install tree-sitter-cli
+
+- name: "Neovim | Install fzf"
+  ansible.builtin.include_role:
+    name: fzf
+
+- name: "Neovim | Install fonts"
+  ansible.builtin.include_role:
+    name: fonts
+
+- name: Neovim | Download Neovim AppImage
+  get_url: 
+    url=https://github.com/neovim/neovim/releases/download/v0.9.5/nvim.appimage
+    dest={{ ansible_user_dir }}
 
 - name: "Neovim | Config folder"
   ansible.builtin.file:
@@ -31,19 +52,30 @@
     state: link
     force: true
 
-# - name: "Neovim | Copy init.lua"
-#   ansible.builtin.copy:
-#     dest: "{{ ansible_user_dir }}/.config/nvim/init.lua"
-#     src: "init.lua"
-#     mode: "0644"
-#
-# - name: "Neovim | Copy .luarc.json"
-#   ansible.builtin.copy:
-#     dest: "{{ ansible_user_dir }}/.config/nvim/.luarc.json"
-#     src: ".luarc.json"
-#     mode: "0644"
-# - name: "Neovim | Copy modules"
-#   ansible.builtin.copy:
-#     dest: "{{ ansible_user_dir }}/.config/nvim/lua"
-#     src: "lua/"
-#     mode: "0644"
+- name: "Go | Check what shell we are running"
+  ansible.builtin.shell: cat /proc/$$/comm
+  register: returned_shell
+
+- name: "Go | Add go binary path to ~/.zshrc"
+  when: returned_shell.stdout.find('zsh') != -1
+  lineinfile:
+    path: '{{ ansible_user_dir }}/.zshrc'
+    line: 'alias vi='~/nvim.appimage''
+    create: true
+    state: present
+
+- name: "Go | Source updated profile"
+  when: returned_shell.stdout.find('zsh') != -1
+  shell: . ~/.zshrc
+
+- name: "Go | Add go binary path to ~/.bashrc"
+  when: returned_shell.stdout.find('bash') != -1
+  lineinfile:
+    path: '{{ ansible_user_dir }}/.bashrc'
+    line: 'alias vi='~/nvim.appimage''
+    create: true
+    state: present
+
+- name: "Go | Source updated profile"
+  when: returned_shell.stdout.find('bash') != -1
+  shell: . ~/.bashrc

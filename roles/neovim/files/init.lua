@@ -1,6 +1,3 @@
-require('techdufus')
-
--- Automatically install lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -14,32 +11,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+require("vim-options")
+require("lazy").setup("plugins")
 
--- Install your plugins here
-require('lazy').setup('plugins', {
-    install = {
-		missing = true,
-	},
-	checker = {
-		enabled = true,
-		notify = true,
-	},
-	change_detection = {
-		enabled = true,
-		notify = true,
-	},
-    performance = {
-        rtp = {
-            -- disable some rtp plugins
-            disabled_plugins = {
-                "gzip",
-                "tarPlugin",
-                "tohtml",
-                "tutor",
-                "zipPlugin",
-            },
-        },
-    },
-})
 
 

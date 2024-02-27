@@ -8,12 +8,14 @@ default_roles:
   - fzf
   - git
   - lazygit
-  # - neovim
+  - neovim
   - python
   - ssh
   - sshfs
   - terraform
   - tmux
+  - go
+  - rust
 
 # This is for sudo password
 # Create string with: ansible-vault encrypt_string --vault-password-file $HOME/.ansible-vault/vault.secret 'password' --name 'ansible_become_pass'
