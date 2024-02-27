@@ -1,0 +1,42 @@
+---
+- name: "Go | Download go tar file"
+  command: wget https://go.dev/dl/go1.22.0.linux-amd64.tar.gz
+
+- name: "Go | Delete previous installation"
+  command: rm -rf /usr/local/go
+  become: true
+
+- name: "Go | Extract and move new go folder to /usr/local"
+  command: tar -C /usr/local -xzf go1.22.0.linux-amd64.tar.gz
+  become: true
+
+- name: "Go | Delete downloaded tar file"
+  shell: rm -rf go1.22.0.linux-amd64.tar.gz*
+
+- name: "Go | Check what shell we are running"
+  ansible.builtin.shell: cat /proc/$$/comm
+  register: returned_shell
+
+- name: "Go | Add go binary path to ~/.zshrc"
+  when: returned_shell.stdout.find('zsh') != -1
+  lineinfile:
+    path: '{{ ansible_user_dir }}/.zshrc'
+    line: 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin'
+    create: true
+    state: present
+
+- name: "Go | Source updated profile"
+  when: returned_shell.stdout.find('zsh') != -1
+  shell: . ~/.zshrc
+
+- name: "Go | Add go binary path to ~/.bashrc"
+  when: returned_shell.stdout.find('bash') != -1
+  lineinfile:
+    path: '{{ ansible_user_dir }}/.bashrc'
+    line: 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin'
+    create: true
+    state: present
+
+- name: "Go | Source updated profile"
+  when: returned_shell.stdout.find('bash') != -1
+  shell: . ~/.bashrc

@@ -20,7 +20,30 @@
   tags:
     - rust
 
-- name: "RUST | Add to $PATH."
-  copy:
-    dest: "{{ ansible_user_dir }}/.zshrc"
-    content: "PATH=$PATH:$HOME/.cargo/bin'
+- name: "RUST | Check what shell we are running"
+  ansible.builtin.shell: cat /proc/$$/comm
+  register: returned_shell
+
+- name: "RUST | Add go binary path to ~/.zshrc"
+  when: returned_shell.stdout.find('zsh') != -1
+  lineinfile:
+    path: '{{ ansible_user_dir }}/.zshrc'
+    line: 'export PATH=$PATH:$HOME/.cargo/bin'
+    create: true
+    state: present
+
+- name: "RUST | Source updated profile"
+  when: returned_shell.stdout.find('zsh') != -1
+  shell: . ~/.zshrc
+
+- name: "RUST | Add go binary path to ~/.bashrc"
+  when: returned_shell.stdout.find('bash') != -1
+  lineinfile:
+    path: '{{ ansible_user_dir }}/.bashrc'
+    line: 'export PATH=$PATH:$HOME/.cargo/bin'
+    create: true
+    state: present
+
+- name: "RUST | Source updated profile"
+  when: returned_shell.stdout.find('bash') != -1
+  shell: . ~/.bashrc
