@@ -68,10 +68,29 @@
   args:
     executable: /bin/bash
 
-- name: "OH_MY_ZSH | Create symlink to role files directory"
+- name: "OH_MY_ZSH | Create symlink to .zshrc"
   ansible.builtin.file:
     src: "{{ role_path }}/files/.zshrc"
     dest: "{{ ansible_user_dir }}/.zshrc"
+    state: link
+    force: true
+
+- name: "OH_MY_ZSH | Check if directory exists"
+  stat:
+  path: "{{ ansible_user_dir }}/dir_colors"
+  register: dir_status
+
+- name: "OH_MY_ZSH | Create directory if it doesnt exist"
+  file:
+  path: "{{ ansible_user_dir }}/dir_colors"
+  state: directory
+  mode: 0755
+  when: dir_status.stat.exists == false
+
+- name: "OH_MY_ZSH | Create symlink to dir_colors"
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/dircolors.gruv2"
+    dest: "{{ ansible_user_dir }}/dir_colors/dircolors.gruv2"
     state: link
     force: true
 

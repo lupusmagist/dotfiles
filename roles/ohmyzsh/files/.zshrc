@@ -125,7 +125,7 @@ alias .....='cd ../../../..'
 alias rmd='/bin/rm  --recursive --force --verbose '
 
 # Load Colors
-# eval `dircolors ~/.dir_colors/dircolors.gruv1`
+eval `dircolors ~/.dir_colors/dircolors.gruv2`
 
 # Change the prompt
 prompt_context() {} 
