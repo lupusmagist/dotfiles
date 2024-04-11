@@ -34,10 +34,18 @@
   ansible.builtin.include_role:
     name: fonts
 
-- name: Neovim | Download Neovim AppImage
-  get_url: 
-    url=https://github.com/neovim/neovim/releases/download/v0.9.5/nvim.appimage
-    dest={{ ansible_user_dir }}
+- name: Neovim | Download Neovim
+      ansible.builtin.get_url:
+        url: "https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz"
+        dest: "/tmp/nvim-linux64.tar.gz"
+        mode: "0644"
+
+- name: Neovim | Extract Neovim to /opt
+  ansible.builtin.unarchive:
+    src: "/tmp/nvim-linux64.tar.gz"
+    dest: /opt
+    extra_opts: [--strip-components=1]
+    creates: /opt/nvim-linux64
 
 - name: "Neovim | Config folder"
   ansible.builtin.file:
@@ -52,27 +60,43 @@
     state: link
     force: true
 
-- name: "Go | Check what shell we are running"
+- name: "Neovim | Check what shell we are running"
   ansible.builtin.shell: cat /proc/$$/comm
   register: returned_shell
 
-- name: "Go | Add go binary path to ~/.zshrc"
+- name: "Neovim | Add vi alias to ~/.zshrc"
   when: returned_shell.stdout.find('zsh') != -1
   lineinfile:
     path: '{{ ansible_user_dir }}/.zshrc'
-    line: 'alias vi='~/nvim.appimage''
+    line: 'alias vi='nvim''
     create: true
     state: present
 
-- name: "Go | Source updated profile"
+- name: "Neovim | Add neovim binary path to ~/.zshrc"
+  when: returned_shell.stdout.find('zsh') != -1
+  lineinfile:
+    path: '{{ ansible_user_dir }}/.zshrc'
+    line: 'export PATH="$PATH:/opt/nvim-linux64/bin"'
+    create: true
+    state: present
+
+- name: "Neovim | Source updated profile"
   when: returned_shell.stdout.find('zsh') != -1
   shell: . ~/.zshrc
 
-- name: "Go | Add go binary path to ~/.bashrc"
+- name: "Neovim | Add vi alias to ~/.bashrc"
   when: returned_shell.stdout.find('bash') != -1
   lineinfile:
     path: '{{ ansible_user_dir }}/.bashrc'
-    line: 'alias vi='~/nvim.appimage''
+    line: 'alias vi='nvim''
+    create: true
+    state: present
+
+- name: "Neovim | Add neovim binary path to ~/.bashrc"
+  when: returned_shell.stdout.find('zsh') != -1
+  lineinfile:
+    path: '{{ ansible_user_dir }}/.bashrc'
+    line: 'export PATH="$PATH:/opt/nvim-linux64/bin"'
     create: true
     state: present
 

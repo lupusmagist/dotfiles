@@ -12,7 +12,11 @@ sudo apt update && sudo apt-get upgrade -y
 sudo apt install git curl
 ```
 
-### vault.secret
+### Dont not git clone, use command below
+
+## Usage
+
+### 1. Create vault.secret
 
 Create ~/.ansible-vault/ and copy current vault.secret file to location.  
 
@@ -23,9 +27,7 @@ ansible-vault encrypt_string --vault-password-file $HOME/.ansible-vault/vault.se
 cat myfile.conf | ansible-vault encrypt_string --vault-password-file $HOME/.ansible-vault/vault.secret --stdin-name "myfile"
 ```
 
-## Usage
-
-### Install
+### 2. Install
 
 This playbook includes a custom shell script located at `bin/dotfiles`. This script is added to your $PATH after installation and can be run multiple times while making sure any Ansible dependencies are installed and updated.
 
@@ -41,6 +43,25 @@ If you want to run only a specific role, you can specify the following bash comm
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/lupusmagist/dotfiles/main/bin/dotfiles | bash -s -- --tags comma,seperated,tags
+```
+
+Run the command below with the git tag. It should install all the needed components, but it will fail.  
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lupusmagist/dotfiles/main/bin/dotfiles | bash -s -- --tags git
+```
+
+Once it has failed, edit the group_vars/all.yml and replace the ansible_become_pass section with new section generated using:  
+
+```bash
+ansible-vault encrypt_string --vault-password-file $HOME/.ansible-vault/vault.secret 'your_sudo_password' --name 'ansible_become_pass'
+```
+
+Now you can cd into .dotfiles and install using instructions below.  
+A reboot might be required at this point.  
+
+```bash
+./bin/dotfiles -t tmux -vvv
 ```
 
 ### Update

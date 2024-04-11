@@ -30,7 +30,7 @@
 
 - name: "Docker | Add Docker’s stable repository"
   ansible.builtin.apt_repository:
-    repo: deb [arch={{ dpkg_architecture.stdout }} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    repo: deb [arch={{ dpkg_architecture.stdout }} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
     mode: "0644"
   become: true
 
@@ -52,7 +52,6 @@
     name: docker
     state: started
   become: true
-  when: not ansible_host_environment_is_wsl
 
 - name: "Docker | Add to group"
   ansible.builtin.user:
