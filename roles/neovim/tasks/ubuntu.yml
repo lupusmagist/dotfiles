@@ -70,6 +70,7 @@
 - name: "Neovim | Check what shell we are running"
   ansible.builtin.shell: cat /proc/$$/comm
   register: returned_shell
+  become_user: "{{ ansible_user_id }}"
 
 - name: "Neovim | Add vi alias to ~/.zshrc"
   when: returned_shell.stdout.find('zsh') != -1
