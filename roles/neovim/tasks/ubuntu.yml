@@ -91,6 +91,8 @@
 - name: "Neovim | Source updated profile"
   when: returned_shell.stdout.find('zsh') != -1
   shell: "source ~/.zshrc"
+  args:
+     executable: /bin/zsh
 
 - name: "Neovim | Add vi alias to ~/.bashrc"
   when: returned_shell.stdout.find('bash') != -1
@@ -111,3 +113,5 @@
 - name: "Go | Source updated profile"
   when: returned_shell.stdout.find('bash') != -1
   shell: "source ~/.bashrc"
+  args:
+     executable: /bin/bash
