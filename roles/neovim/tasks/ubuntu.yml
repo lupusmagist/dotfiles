@@ -50,7 +50,7 @@
 - name: Neovim | Extract Neovim to /opt
   ansible.builtin.unarchive:
     src: "/tmp/nvim-linux64.tar.gz"
-    dest: /opt/
+    dest: /opt/nvim-linux64
     extra_opts: [--strip-components=1]
     creates: /opt/nvim-linux64
   become: true
