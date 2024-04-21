@@ -91,7 +91,7 @@ or
 
 ### Update
 
-To update your environment run the `dotfiles` command in your shell:
+Updates happen each time the dotfiles command is run. (Even when installing specific roles).  
 
 ```bash
 dotfiles
