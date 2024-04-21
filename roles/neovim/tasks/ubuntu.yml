@@ -68,7 +68,7 @@
     force: true
 
 - name: "Neovim | Check what shell we are running"
-  ansible.builtin.shell: cat /proc/$$/comm
+  ansible.builtin.shell: echo $SHELL
   register: returned_shell
   become_user: "{{ ansible_user_id }}"
 
