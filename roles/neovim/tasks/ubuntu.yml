@@ -46,6 +46,7 @@
     dest: /opt
     extra_opts: [--strip-components=1]
     creates: /opt/nvim-linux64
+  become: true
 
 - name: "Neovim | Config folder"
   ansible.builtin.file:
