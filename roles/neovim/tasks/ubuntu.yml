@@ -30,9 +30,9 @@
   ansible.builtin.include_role:
     name: fzf
 
-# - name: "Neovim | Install fonts"
-#   ansible.builtin.include_role:
-#     name: fonts
+- name: "Neovim | Install fonts"
+  ansible.builtin.include_role:
+    name: fonts
 
 - name: Neovim | Download Neovim
   ansible.builtin.get_url:
