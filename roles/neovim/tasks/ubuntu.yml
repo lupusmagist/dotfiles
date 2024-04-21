@@ -90,7 +90,7 @@
 
 - name: "Neovim | Source updated profile"
   when: returned_shell.stdout.find('zsh') != -1
-  shell: . ~/.zshrc
+  shell: source ~/.zshrc
   become_user: "{{ ansible_user_id }}"
 
 - name: "Neovim | Add vi alias to ~/.bashrc"
@@ -111,5 +111,5 @@
 
 - name: "Go | Source updated profile"
   when: returned_shell.stdout.find('bash') != -1
-  shell: . ~/.bashrc
+  shell: source ~/.bashrc
   become_user: "{{ ansible_user_id }}"
