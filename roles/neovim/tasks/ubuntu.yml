@@ -30,9 +30,9 @@
   ansible.builtin.include_role:
     name: fzf
 
-- name: "Neovim | Install fonts"
-  ansible.builtin.include_role:
-    name: fonts
+# - name: "Neovim | Install fonts"
+#   ansible.builtin.include_role:
+#     name: fonts
 
 - name: Neovim | Download Neovim
   ansible.builtin.get_url:
@@ -51,8 +51,7 @@
   ansible.builtin.unarchive:
     src: "/tmp/nvim-linux64.tar.gz"
     dest: /opt/nvim-linux64
-    extra_opts: [--strip-components=1]
-    creates: /opt/nvim-linux64
+    extra_opts: [--strip-components=1]  
   become: true
 
 - name: "Neovim | Config folder"
