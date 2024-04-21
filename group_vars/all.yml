@@ -1,9 +1,9 @@
 default_roles:
   - system
-  - kitty
-  - bash
+  # - kitty
+  - ohmyzsh
   - bat
-  - docker
+  # - docker
   - fonts
   - fzf
   - git
@@ -12,7 +12,6 @@ default_roles:
   - python
   - ssh
   - sshfs
-  - terraform
   - tmux
   - go
   - rust

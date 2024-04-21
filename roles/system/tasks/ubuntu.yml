@@ -8,19 +8,15 @@
     autoclean: true
   become: true
 
-- name: "System | Install"
+- name: "System | Install base packages"
   ansible.builtin.apt:
     name:
       - jq
       - open-iscsi
-    state: present
-  become: true
-
-- name: "System | Set sudo"
-  ansible.builtin.template:
-    src: user-sudo.j2
-    dest: "/etc/sudoers.d/{{ ansible_env['USER'] }}"
-    mode: "0644"
+      - sudo
+      - neofetch
+      - htop
+   state: present
   become: true
 
 - name: "System | Ensure group exists for current user"
@@ -35,11 +31,3 @@
     groups: "{{ host_user }}"
     append: true
   become: true
-
-- name: "System | Set hosts"
-  ansible.builtin.template:
-    dest: "/etc/hosts"
-    src: hosts.j2
-    mode: "0644"
-  become: true
-  when: not ansible_host_environment_is_wsl
