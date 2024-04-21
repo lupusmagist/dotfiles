@@ -90,7 +90,7 @@
 
 - name: "Neovim | Source updated profile"
   when: returned_shell.stdout.find('zsh') != -1
-  shell: source ~/.zshrc
+  shell: . ~/.zshrc
   become_user: "{{ ansible_user_id }}"
 
 - name: "Neovim | Add vi alias to ~/.bashrc"
@@ -102,7 +102,7 @@
     state: present
 
 - name: "Neovim | Add neovim binary path to ~/.bashrc"
-  when: returned_shell.stdout.find('zsh') != -1
+  when: returned_shell.stdout.find('bash') != -1
   lineinfile:
     path: '{{ ansible_user_dir }}/.bashrc'
     line: 'export PATH=$PATH:/opt/nvim-linux64/bin'
@@ -111,5 +111,5 @@
 
 - name: "Go | Source updated profile"
   when: returned_shell.stdout.find('bash') != -1
-  shell: source ~/.bashrc
+  shell: . ~/.bashrc
   become_user: "{{ ansible_user_id }}"
