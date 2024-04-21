@@ -75,17 +75,13 @@
     state: link
     force: true
 
-- name: "OH_MY_ZSH | Check if directory exists"
-  stat:
-    path: "{{ ansible_user_dir }}/dir_colors"
-  register: dir_status
-
-- name: "OH_MY_ZSH | Create directory if it doesnt exist"
+- name: "H_MY_ZSH | Check if dir_colors directory exists"
   file:
+    group: "{{ nf_group|default(omit) }}"
+    owner: "{{ nf_user }}"
     path: "{{ ansible_user_dir }}/dir_colors"
-  state: directory
-  mode: 0755
-  when: dir_status.stat.exists == false
+    recurse: true
+    state: directory
 
 - name: "OH_MY_ZSH | Create symlink to dir_colors"
   ansible.builtin.file:
