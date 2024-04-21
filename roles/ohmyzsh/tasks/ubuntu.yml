@@ -79,14 +79,14 @@
   file:
     group: "{{ nf_group|default(omit) }}"
     owner: "{{ nf_user }}"
-    path: "{{ ansible_user_dir }}/dir_colors"
+    path: "{{ ansible_user_dir }}/.dir_colors"
     recurse: true
     state: directory
 
 - name: "OH_MY_ZSH | Create symlink to dir_colors"
   ansible.builtin.file:
     src: "{{ role_path }}/files/dircolors.gruv2"
-    dest: "{{ ansible_user_dir }}/dir_colors/dircolors.gruv2"
+    dest: "{{ ansible_user_dir }}/.dir_colors/dircolors.gruv2"
     state: link
     force: true
 
