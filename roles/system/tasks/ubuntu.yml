@@ -16,7 +16,7 @@
       - sudo
       - neofetch
       - htop
-   state: present
+    state: present
   become: true
 
 - name: "System | Ensure group exists for current user"

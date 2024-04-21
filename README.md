@@ -8,6 +8,7 @@ Check out TechDufus for a more comprehensive guide on how all of this works, the
 ### Update system and install dependencies  
 
 ```
+mkdir ~/.ansible-vault
 sudo apt update && sudo apt-get upgrade -y
 sudo apt install git curl
 ```
@@ -18,13 +19,26 @@ sudo apt install git curl
 
 ### 1. Create vault.secret
 
-Create ~/.ansible-vault/ and copy current vault.secret file to location.  
+Copy your current vault.secret file to location.  
 
-Encrypting items using vault.secret:  
+If you do not have a current vault.secret file create one. In the file must be one line with random chars, or a password.  
+This is the secret key that ansible will use to encrypt/decrypt the passwords used in you configs.
 
 ```bash
-ansible-vault encrypt_string --vault-password-file $HOME/.ansible-vault/vault.secret "mynewsecret" --name "MY_SECRET_VAR"
-cat myfile.conf | ansible-vault encrypt_string --vault-password-file $HOME/.ansible-vault/vault.secret --stdin-name "myfile"
+echo 7QkxLeQXHaPMUvgNQ1FSPO0 > ~/.ansible-vault/vault.secret
+```
+
+This vault.secret can be copied to new installs.  
+
+Next you will have to edit the group_vars/all.yml file.  
+Remove the sections for: work_computer and ssh_key.  
+Edit or delete the section for git_user_name.  
+
+New keys will have to generated and copied into ansible_become_pass and git_user_email sections using:  
+
+```bash
+ansible-vault encrypt_string --vault-password-file $HOME/.ansible-vault/vault.secret 'your_sudo_password' --name 'ansible_become_pass'
+ansible-vault encrypt_string --vault-password-file $HOME/.ansible-vault/vault.secret 'your_git_email_address' --name 'git_user_email'
 ```
 
 ### 2. Install
@@ -33,35 +47,46 @@ This playbook includes a custom shell script located at `bin/dotfiles`. This scr
 
 This shell script is also used to initialize your environment after installing `Debian` and performing a full system upgrade as mentioned above.
 
-> NOTE: You must follow required steps before running this command or things may become unusable until fixed.
+> NOTE: You must follow required steps below before running the full system command or things may become unusable until fixed.  
+Run the command below with the git tag. It should install all the needed components, but it will fail.
+
+#### Test command
+
+The comand below will install Ansible and try to install Git (That was already manaually installed above.)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lupusmagist/dotfiles/main/bin/dotfiles | bash -s -- --tags git
+```
+
+The command above might fail while updating Ansible, just run it again. If it fails with a Ansible error:
+
+```bash
+cd ~/.dotfiles
+./bin/dotfiles -t git -vvv
+```
+
+This will provide more detail on the failure.  
+Most of the time it can be traced back to the secrets above.  
+
+If the above command completes, you can install either all scripts or select the ones to install as sugested below.  
 
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/lupusmagist/dotfiles/main/bin/dotfiles)"
+
+or 
+
+~/.dotfiles//bin/dotfiles
 ```
 
 If you want to run only a specific role, you can specify the following bash command:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/lupusmagist/dotfiles/main/bin/dotfiles | bash -s -- --tags comma,seperated,tags
-```
 
-Run the command below with the git tag. It should install all the needed components, but it will fail.  
+or 
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/lupusmagist/dotfiles/main/bin/dotfiles | bash -s -- --tags git
-```
+~/.dotfiles//bin/dotfiles -t comma,seperated,tags
 
-Once it has failed, edit the group_vars/all.yml and replace the ansible_become_pass section with new section generated using:  
-
-```bash
-ansible-vault encrypt_string --vault-password-file $HOME/.ansible-vault/vault.secret 'your_sudo_password' --name 'ansible_become_pass'
-```
-
-Now you can cd into .dotfiles and install using instructions below.  
-A reboot might be required at this point.  
-
-```bash
-./bin/dotfiles -t tmux -vvv
 ```
 
 ### Update
@@ -88,4 +113,14 @@ For Example: Running the tmux tag with verbosity
 
 ```bash
 dotfiles -t tmux -vvv
+```
+
+#### Encrypting items using vault.secret  
+
+```bash
+ansible-vault encrypt_string --vault-password-file $HOME/.ansible-vault/vault.secret "mynewsecret" --name "MY_SECRET_VAR"
+
+or
+
+cat myfile.conf | ansible-vault encrypt_string --vault-password-file $HOME/.ansible-vault/vault.secret --stdin-name "myfile"
 ```
