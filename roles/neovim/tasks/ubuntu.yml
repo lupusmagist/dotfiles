@@ -67,15 +67,15 @@
 - name: "Neovim | Add vi alias to ~/.zshrc"
   when: returned_shell.stdout.find('zsh') != -1
   lineinfile:
-    path: '{{ ansible_user_dir }}/.zshrc'
-    line: 'alias vi='nvim''
+    path: "{{ ansible_user_dir }}/.zshrc"
+    line: 'alias vi="nvim"'
     create: true
     state: present
 
 - name: "Neovim | Add neovim binary path to ~/.zshrc"
   when: returned_shell.stdout.find('zsh') != -1
   lineinfile:
-    path: '{{ ansible_user_dir }}/.zshrc'
+    path: "{{ ansible_user_dir }}/.zshrc"
     line: 'export PATH="$PATH:/opt/nvim-linux64/bin"'
     create: true
     state: present
@@ -88,7 +88,7 @@
   when: returned_shell.stdout.find('bash') != -1
   lineinfile:
     path: '{{ ansible_user_dir }}/.bashrc'
-    line: 'alias vi='nvim''
+    line: 'alias vi="nvim"'
     create: true
     state: present
 
