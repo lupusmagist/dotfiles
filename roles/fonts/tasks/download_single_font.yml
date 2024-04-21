@@ -11,7 +11,7 @@
   register: dirstatus
 
 - name: Create directory for {{ nf_font_family_dir }} fonts.
-  when: p.stat.isdir is not defined
+  when: dirstatus.stat.exists is false
   file:
     owner: "{{ nf_user }}"
     group: "{{ nf_group|default(omit) }}"
@@ -19,7 +19,7 @@
     state: directory
 
 - name: Download {{ font|basename }}.
-  when: p.stat.isdir is not defined
+  when: dirstatus.stat.exists is false
   get_url:
     dest: "{{ nf_fonts_dir }}/{{ nf_font_family_dir }}/{{ font|basename }}"
     group: "{{ nf_group|default(omit) }}"
