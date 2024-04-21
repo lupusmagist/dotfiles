@@ -40,17 +40,17 @@
     dest: "/tmp/nvim-linux64.tar.gz"
     mode: "0644"
 
-- name: "Neovim| Check if /opt/nvim-linux64 directory exists"
-  file:
-    path: "/opt/nvim-linux64"
-    recurse: true
-    state: directory
-  become: true
+# - name: "Neovim| Check if /opt/nvim-linux64 directory exists"
+#   file:
+#     path: "/opt/nvim-linux64"
+#     recurse: true
+#     state: directory
+#   become: true
 
 - name: Neovim | Extract Neovim to /opt
   ansible.builtin.unarchive:
     src: "/tmp/nvim-linux64.tar.gz"
-    dest: /opt/nvim-linux64
+    dest: /opt/
     extra_opts: [--strip-components=1]
     creates: /opt/nvim-linux64
   become: true
