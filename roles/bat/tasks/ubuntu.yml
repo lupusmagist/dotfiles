@@ -45,10 +45,3 @@
       ansible.builtin.apt:
         deb: "{{ debian_url }}"
         allow_downgrade: true
-
-- name: BAT | Create link bat to batcat in Debian
-  become: true
-  ansible.builtin.file:
-    src: '/usr/bin/batcat'
-    dest: '/usr/bin/bat'
-    state: link

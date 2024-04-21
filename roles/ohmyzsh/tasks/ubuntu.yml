@@ -75,7 +75,7 @@
     state: link
     force: true
 
-- name: "H_MY_ZSH | Check if dir_colors directory exists"
+- name: "OH_MY_ZSH | Check if dir_colors directory exists"
   file:
     group: "{{ nf_group|default(omit) }}"
     owner: "{{ nf_user }}"
